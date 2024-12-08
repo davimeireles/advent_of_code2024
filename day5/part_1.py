@@ -1,5 +1,5 @@
 def main():
-    lines = open("main_test.txt", 'r').readlines()
+    lines = open("input.txt", 'r').readlines()
     
     rules_map = {}
     
@@ -17,12 +17,33 @@ def main():
     
     for line in lines:
         if (line.find(",") == -1):
-            continue;
+            continue
         else:
-            updates.append(line.strip().split())
-        
+            updates.append(list(map(int, line.strip().split(","))))
+
+    middle_numbers = []
+
     for update in updates:
-        print(f"update: {update}")
+        is_valid = True
+        for i, num in enumerate(update):
+            if str(num) in rules_map:
+                for j in range(i):
+                    if str(update[j]) in rules_map[str(num)]:
+                        is_valid = False
+                        break
+            if not is_valid:
+                break
+        if is_valid:
+            middle_index = len(update) // 2
+            middle_number = update[middle_index]
+            middle_numbers.append(middle_number)
+            print(f"Valid line: {update}, Middle number: {middle_number}")
+        else:
+            print(f"Invalid line: {update}")
+
+    total_sum = sum(middle_numbers)
+    print(f"All middle numbers: {middle_numbers}")
+    print(f"Total sum of all middle numbers: {total_sum}")
 
 if __name__ == "__main__":
     main()
